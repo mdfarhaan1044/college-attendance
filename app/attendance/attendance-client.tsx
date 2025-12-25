@@ -55,12 +55,14 @@ export default function AttendancePage({
   }, [studentFilter, studentAttendance, students]);
 
   const branches = useMemo(() => {
-    return ["All", ...new Set((teachers ?? []).map((t) => t.branch).filter(Boolean))];
+    return ["All", ...new Set((teachers ?? []).map((t) => t.branch).filter((b): b is string => !!b))];
   }, [teachers]);
 
+
   const departments = useMemo(() => {
-    return ["All", ...new Set((students ?? []).map((s) => s.branch).filter(Boolean))];
+    return ["All", ...new Set((students ?? []).map((s) => s.branch).filter((b): b is string => !!b))];
   }, [students]);
+
 
   const toggleTeacher = (id: number, checked: boolean) => {
     setTeacherAttendance((list) =>
