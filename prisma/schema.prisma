@@ -1,0 +1,74 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Teacher {
+  TeacherID             Int              @id @default(autoincrement())
+  FirstName      String
+  LastName       String
+  Gender         String?
+  DOB            DateTime?
+  Email          String?          @unique
+  Phone          String?
+  Address        String?
+  Branch         String?
+  Subject        String?
+  Qualification  String?
+  ExperienceYears Int             @default(0)
+  Salary         Decimal?
+  JoinDate       DateTime
+  Status         String           @default("Active")
+  createdAt      DateTime         @default(now())
+  attendance     TeacherAttendance[]
+}
+
+model Student {
+  StudentID             Int                @id @default(autoincrement())
+  FirstName      String
+  LastName       String
+  Gender         String?
+  DOB            DateTime?
+  Email          String?            @unique
+  Phone          String?
+  Address        String?
+  Branch         String?
+  Year           Int?
+  Section        String?
+  RollNumber     Int?
+  AdmissionDate  DateTime
+  ParentName     String?
+  ParentPhone    String?
+  ParentEmail    String?
+  Status         String             @default("Active")
+  createdAt      DateTime           @default(now())
+  attendance     StudentAttendance[]
+}
+
+model TeacherAttendance {
+  AttendanceID Int      @id @default(autoincrement())
+  TeacherID    Int
+  Date         DateTime
+  Status       String
+  CheckInTime  DateTime?
+  IsLate       Boolean  @default(false)
+  teacher      Teacher  @relation(fields: [TeacherID], references: [TeacherID])
+
+  @@index([TeacherID, Date])
+}
+
+model StudentAttendance {
+  AttendanceID          Int      @id @default(autoincrement())
+  StudentID   Int
+  Date        DateTime
+  Status      String
+  CheckInTime DateTime?
+  student     Student  @relation(fields: [StudentID], references: [StudentID])
+
+  @@index([StudentID, Date])
+}
+
